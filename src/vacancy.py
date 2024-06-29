@@ -10,15 +10,11 @@ class Vacancy:
     # area: str
 
     def __init__(self, name, salary, working_days, link):
-        self.name = name if name else 'Не указано'
-        self.currency = salary['currency']
-        if salary is None:
-            self.currency = 'Не указано'
-        self.pay = salary['from']
-        if salary is None:
-            self.pay = 0
-        self.working_days = working_days if working_days else 'Не указано'
-        self.link = link if link else 'Не указано'
+        self.name = name if name else 'Название не указано'
+        self.currency = salary['currency'] if salary['currency'] else 'Валюта не указана'
+        self.pay = salary['from'] if salary['from'] else 0
+        self.working_days = working_days if working_days else 'График не указан'
+        self.link = link if link else 'Ссылка не указана'
 
     def __repr__(self):
         """Представление для отладки"""
@@ -41,12 +37,15 @@ class Vacancy:
             return 'Ошибка сравнения'
 
 
-sal1 = {'currency': None, 'from': 5000}
-sal2 = {'currency': 'RUB', 'from': 7000}
-vac1 = Vacancy('pudge', sal1, 'ПН-ПТ', 'link//link231')
-vac2 = Vacancy('rudge', sal2, 'ПН-ПТ', 'link//link231')
-print(vac1)
-print(vac1.compare_pay(vac2))
+if __name__ == '__main__':
+
+    sal1 = {'currency': None, 'from': 5000}
+    sal2 = {'currency': 'RUB', 'from': 7000}
+    vac1 = Vacancy('pudge', sal1, 'ПН-ПТ', 'link//link231')
+    vac2 = Vacancy('rudge', sal2, 'ПН-ПТ', 'link//link231')
+    print(vac1)
+    print(vac2)
+    print(vac1.compare_pay(vac2))
 
 
 "Создать класс для работы с вакансиями. В этом классе самостоятельно определить атрибуты,"
