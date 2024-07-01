@@ -26,15 +26,13 @@ class Vacancy:
 
     def compare_pay(self, other):
         """Если буду работать с разными валютами понадобится проверка"""
-        try:
-            if isinstance(other, self.__class__):
-                difference = self.pay - other.pay
-                if self.pay < other.pay:
-                    return f'На второй работе зарплата выше на {abs(difference)} {self.currency}'
-                else:
-                    return f'На второй работе зарплата ниже на {abs(difference)} {self.currency}'
-        except TypeError('Можно сравнивать только экземпляры класса Vacancy'):
-            return 'Ошибка сравнения'
+        if isinstance(other, self.__class__):
+            difference = self.pay - other.pay
+            if self.pay < other.pay:
+                return f'На второй работе зарплата выше на {abs(difference)} {self.currency}'
+            else:
+                return f'На второй работе зарплата ниже на {abs(difference)} {self.currency}'
+        raise TypeError('Сравнивать можно только с экземплярами класса Vacancy')
 
 
 if __name__ == '__main__':
