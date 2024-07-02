@@ -24,6 +24,11 @@ class Vacancy:
         """Представление для пользователя"""
         return f'{self.name}, {self.pay} {self.currency}, {self.working_days}, {self.link}'
 
+    def cast_to_object_list(self, items):
+        """Преобразование набора данных из JSON в список объектов"""
+        for item in items:
+            self.__init__(item['name'], item['salary'], item['working_days'], item['alternate_url'])
+
     def compare_pay(self, other):
         """Если буду работать с разными валютами понадобится проверка"""
         if isinstance(other, self.__class__):
