@@ -7,5 +7,9 @@ class FileWorker(ABC):
         pass
 
     @abstractmethod
-    def write_down(self, data):
+    def add_vacancy(self, vacancy):
+        pass
+
+    @abstractmethod
+    def delete_vacancy(self, vacancy):
         pass
