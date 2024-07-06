@@ -9,15 +9,19 @@ class FileWorkerJson(FileWorker):
 
     def __init__(self, file_path=None):
         self.file_path = file_path if file_path else r'data\loaded_data.json'
+        path_to_project = path.abspath(__file__)[:-23]
+        self.full_file_path = f'{path_to_project}{self.file_path}'
         super().__init__(file_path)
 
-    def write_down(self, data):
+    def add_vacancy(self, vacancy):
         """Запись данных в loaded_data.json"""
-        path_to_project = path.abspath(__file__)[:-23]
-        full_file_path = f'{path_to_project}{self.file_path}'
 
-        with open(file=full_file_path, mode='a', encoding='UTF-8') as file:
-            file.write(json.dumps(data))
+        with open(file=self.full_file_path, mode='a', encoding='UTF-8') as file:
+            file.write(json.dumps(vacancy))
+
+    def delete_vacancy(self, vacancy):
+        with open(file=self.full_file_path, mode='w', encoding='UTF-8') as file:
+            file.truncate(vacancy)
 
 
 """Определить абстрактный класс, который обязывает реализовать методы для добавления вакансий в файл,
