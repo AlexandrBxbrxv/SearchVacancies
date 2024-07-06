@@ -10,12 +10,12 @@ class HHruAPI(Parser):
     Класс для работы с API HeadHunter
     """
 
-    def __init__(self, file_worker):  # Класс для работы с файлами
+    def __init__(self):
         self._url = 'https://api.hh.ru/vacancies'
         self._headers = {'User-Agent': 'HH-User-Agent'}
         self.params = {'text': '', 'page': 0, 'per_page': 10}  # тег работы, страница, вакансий на странице
         self.vacancies = []
-        super().__init__(file_worker)
+        super().__init__()
 
     def load_vacancies(self, keyword):
         """Загружает с сайта api.hh.ru вакансии и складывает их в список vacancies"""
