@@ -10,9 +10,11 @@ class Vacancy:
     # area: str
 
     def __init__(self, name, salary, working_days, link):
+        if salary is None:
+            salary = {}
         self.name = name if name else 'Название не указано'
-        self.currency = salary['currency'] if salary['currency'] else 'Валюта не указана'
-        self.pay = salary['from'] if salary['from'] else 0
+        self.currency = salary.get('currency') if salary.get('currency') else 'Валюта не указана'
+        self.pay = salary.get('from') if salary.get('from') else 0
         self.working_days = working_days if working_days else 'График не указан'
         self.link = link if link else 'Ссылка не указана'
 
@@ -24,10 +26,14 @@ class Vacancy:
         """Представление для пользователя"""
         return f'{self.name}, {self.pay} {self.currency}, {self.working_days}, {self.link}'
 
-    def cast_to_object_list(self, items):
+    @classmethod
+    def cast_to_object_list(cls, items):
         """Преобразование набора данных из JSON в список объектов"""
+        object_list = []
         for item in items:
-            self.__init__(item['name'], item['salary'], item['working_days'], item['alternate_url'])
+            vacancy = Vacancy(item.get('name'), item.get('salary'), item.get('working_days'), item.get('alternate_url'))
+            object_list.append(vacancy)
+        return object_list
 
     def compare_pay(self, other):
         """Если буду работать с разными валютами понадобится проверка"""
@@ -46,6 +52,7 @@ if __name__ == '__main__':
     sal2 = {'currency': 'RUB', 'from': 7000}
     vac1 = Vacancy('pudge', sal1, 'ПН-ПТ', 'link//link231')
     vac2 = Vacancy('rudge', sal2, 'ПН-ПТ', 'link//link231')
+    vac3 = Vacancy('rudge', None, 'ПН-ПТ', 'link//link231')
     print(vac1)
     print(vac2)
     print(vac1.compare_pay(vac2))
