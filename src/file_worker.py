@@ -11,5 +11,9 @@ class FileWorker(ABC):
         pass
 
     @abstractmethod
+    def find_vacancies(self, key, value):
+        pass
+
+    @abstractmethod
     def delete_vacancy(self, vacancy):
         pass
