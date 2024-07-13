@@ -1,3 +1,4 @@
+import json
 from os import path
 
 
@@ -10,9 +11,9 @@ class ApiDataWorker:
 
     def save(self, data):
         with open(self.full_file_path, 'w', encoding='UTF-8') as file:
-            file.write(data)
+            file.write(json.dumps(data))
 
     def load(self):
         with open(self.full_file_path, 'r', encoding='UTF-8') as file:
-            data = file.read()
+            data = json.loads(file.read())
         return data
