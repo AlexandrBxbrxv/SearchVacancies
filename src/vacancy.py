@@ -4,37 +4,39 @@ class Vacancy:
     alternate_url: str
     pay: int
     currency: str
-    working_days: str
+    area_name: str
     index: int
 
     index = -1
 
-    def __init__(self, name, salary, working_days, alternate_url):
+    def __init__(self, name, salary, area, alternate_url):
         if salary is None:
             salary = {}
-        self.name = name if name else 'Название не указано'
-        self.currency = salary.get('currency') if salary.get('currency') else 'Валюта не указана'
+        if area is None:
+            area = {}
+        self.name = name if name else 'Название -'
+        self.currency = salary.get('currency') if salary.get('currency') else 'Валюта -'
         self.pay = salary.get('from') if salary.get('from') else 0
-        self.working_days = working_days if working_days else 'График не указан'
-        self.alternate_url = alternate_url if alternate_url else 'Ссылка не указана'
+        self.area_name = area.get('name') if area.get('name') else 'Локация -'
+        self.alternate_url = alternate_url if alternate_url else 'Ссылка -'
         Vacancy.index += 1
         self.index = Vacancy.index
 
     def __repr__(self):
         """Представление для отладки"""
-        return f"{self.__class__.__name__}('{self.name}', {self.pay}, '{self.working_days}', '{self.alternate_url}')"
+        return f"{self.__class__.__name__}('{self.name}', {self.pay}, '{self.area_name}', '{self.alternate_url}')"
 
     def __str__(self):
         """Представление для пользователя"""
-        return f'{self.name}, {self.pay} {self.currency}, {self.working_days}, {self.alternate_url}'
+        return f'{self.name}, {self.pay} {self.currency}, {self.area_name}, {self.alternate_url}'
 
     @classmethod
     def cast_to_object_list(cls, items):
         """Преобразование набора данных из JSON в список объектов"""
         object_list = []
         for item in items:
-            vacancy = Vacancy(item.get('name'), item.get('salary'), item.get('working_days'), item.get('alternate_url'))
-            if vacancy.pay == 0 or vacancy.currency == 'Валюта не указана':
+            vacancy = Vacancy(item.get('name'), item.get('salary'), item.get('area'), item.get('alternate_url'))
+            if vacancy.pay == 0 or vacancy.currency == 'Валюта -':
                 del vacancy
                 Vacancy.index -= 1
             else:
