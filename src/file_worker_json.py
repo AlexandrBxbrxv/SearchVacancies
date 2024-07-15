@@ -5,40 +5,51 @@ from src.file_worker import FileWorker
 
 
 class FileWorkerJson(FileWorker):
-    """Класс для сохранения данных в файлы.json"""
+    """Класс для сохранения данных в файлы.json
+    во время работы программы составляет список сохраняемых вакансий,
+     перед прекращением программы сохраняет список в файл"""
+    file_path: str
+    vacancy_list: list
 
     def __init__(self, file_path=None):
-        self.file_path = file_path if file_path else r'data\loaded_data.json'
+        self.file_path = file_path if file_path else r'data\saved_vacancies.json'
         path_to_project = path.abspath(__file__)[:-23]
-        self.full_file_path = f'{path_to_project}{self.file_path}'
+        self.__full_file_path = f'{path_to_project}{self.file_path}'
+        self.vacancy_list = []
         super().__init__(file_path)
 
     def add_vacancy(self, vacancy):
-        """Запись данных в loaded_data.json"""
+        """Запись данных в список на сохранение"""
+        vacancy_dict = {
+         'id': vacancy.index,
+         'name': vacancy.name,
+         'salary': {'from': vacancy.pay, 'currency': vacancy.currency},
+         'working_days': vacancy.working_days
+        }
 
-        with open(file=self.full_file_path, mode='a', encoding='UTF-8') as file:
-            file.write(json.dumps(vacancy))
+        self.vacancy_list.append(vacancy_dict)
+        self.__save()
 
-    def delete_vacancy(self, vacancy):
-        with open(file=self.full_file_path, mode='w', encoding='UTF-8') as file:
-            file.truncate(vacancy)
+    def find_vacancies_pay(self, value):
+        result = []
+        saved = self.__load()
+        for pos in saved:
+            if pos['salary']['from'] > value:
+                result.append(pos)
+        return result
 
+    def delete_vacancy(self, vacancy_id):
+        """Удаление вакансии из списка на сохранение"""
+        for item in self.vacancy_list:
+            if item['id'] == vacancy_id:
+                self.vacancy_list.remove(item)
 
-"""Определить абстрактный класс, который обязывает реализовать методы для добавления вакансий в файл,
-получения данных из файла по указанным критериям и удаления информации о вакансиях. Создать класс для сохранения
-информации о вакансиях в JSON-файл. Дополнительно, по желанию, можно реализовать классы для работы с другими форматами,
-например с CSV- или Excel-файлом, с TXT-файлом."""
+    def __save(self):
+        """Записывает список в файл saved_vacancies.json"""
+        with open(file=self.__full_file_path, mode='w', encoding='UTF-8') as file:
+            file.write(json.dumps(self.vacancy_list, indent=2))
 
-"""Данный класс выступит в роли основы для коннектора, заменяя который (класс-коннектор),
-можно использовать в качестве хранилища одну из баз данных или удаленное хранилище со своей
-специфической системой обращений.
-В случае если какие-то из методов выглядят не используемыми для работы с файлами,
-то не стоит их удалять. Они пригодятся для интеграции к БД. Сделайте заглушку в коде."""
-
-
-if __name__ == '__main__':
-    file_worker_json = FileWorkerJson()
-
-    with open(file='data.json', mode='w', encoding='UTF-8') as file:
-        file.write('')
-
+    def __load(self):
+        """Загружает список вакансий из файла saved_vacancies.json"""
+        with open(file=self.__full_file_path, mode='r', encoding='UTF-8') as file:
+            return json.loads(file.read())
