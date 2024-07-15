@@ -24,7 +24,8 @@ class FileWorkerJson(FileWorker):
          'id': vacancy.index,
          'name': vacancy.name,
          'salary': {'from': vacancy.pay, 'currency': vacancy.currency},
-         'working_days': vacancy.working_days
+         'working_days': vacancy.working_days,
+         'alternate_url': vacancy.alternate_url
         }
 
         self.vacancy_list.append(vacancy_dict)
@@ -33,7 +34,7 @@ class FileWorkerJson(FileWorker):
     def find_vacancies_pay(self, value):
         """Выдает список вакансий зарплата которых >= value"""
         result = []
-        saved = self.__load()
+        saved = self.load()
         for pos in saved:
             if pos['salary']['from'] >= value:
                 result.append(pos)
@@ -50,7 +51,7 @@ class FileWorkerJson(FileWorker):
         with open(file=self.__full_file_path, mode='w', encoding='UTF-8') as file:
             file.write(json.dumps(self.vacancy_list, indent=2))
 
-    def __load(self):
+    def load(self):
         """Загружает список вакансий из файла saved_vacancies.json"""
         with open(file=self.__full_file_path, mode='r', encoding='UTF-8') as file:
             return json.loads(file.read())
