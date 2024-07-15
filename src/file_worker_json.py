@@ -31,10 +31,11 @@ class FileWorkerJson(FileWorker):
         self.__save()
 
     def find_vacancies_pay(self, value):
+        """Выдает список вакансий зарплата которых >= value"""
         result = []
         saved = self.__load()
         for pos in saved:
-            if pos['salary']['from'] > value:
+            if pos['salary']['from'] >= value:
                 result.append(pos)
         return result
 
