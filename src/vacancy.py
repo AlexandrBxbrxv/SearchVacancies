@@ -34,7 +34,11 @@ class Vacancy:
         object_list = []
         for item in items:
             vacancy = Vacancy(item.get('name'), item.get('salary'), item.get('working_days'), item.get('alternate_url'))
-            object_list.append(vacancy)
+            if vacancy.pay == 0 or vacancy.currency == 'Валюта не указана':
+                del vacancy
+                Vacancy.index -= 1
+            else:
+                object_list.append(vacancy)
         return object_list
 
     def compare_pay(self, other):
