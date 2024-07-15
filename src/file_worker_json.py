@@ -24,7 +24,7 @@ class FileWorkerJson(FileWorker):
          'id': vacancy.index,
          'name': vacancy.name,
          'salary': {'from': vacancy.pay, 'currency': vacancy.currency},
-         'working_days': vacancy.working_days,
+         'area': {'name': vacancy.area_name},
          'alternate_url': vacancy.alternate_url
         }
 
