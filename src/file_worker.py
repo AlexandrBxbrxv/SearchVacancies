@@ -11,7 +11,7 @@ class FileWorker(ABC):
         pass
 
     @abstractmethod
-    def find_vacancies(self, key, value):
+    def find_vacancies_pay(self, *args, **kwargs):
         pass
 
     @abstractmethod
