@@ -14,7 +14,7 @@ class Vacancy:
             salary = {}
         self.name = name if name else 'Название не указано'
         self.currency = salary.get('currency') if salary.get('currency') else 'Валюта не указана'
-        self.pay = salary.get('from') if salary.get('from') else 'Зарплата не указана'
+        self.pay = salary.get('from') if salary.get('from') else 0
         self.working_days = working_days if working_days else 'График не указан'
         self.link = link if link else 'Ссылка не указана'
         Vacancy.index += 1
