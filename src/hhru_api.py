@@ -1,6 +1,3 @@
-import json
-from os import path
-
 import requests
 from src.parser import Parser
 
@@ -17,7 +14,7 @@ class HHruAPI(Parser):
         self.vacancies = []
         super().__init__()
 
-    def load_vacancies(self, keyword):
+    def load(self, keyword):
         """Загружает с сайта api.hh.ru вакансии и складывает их в список vacancies"""
         self.params['text'] = keyword  # ['job']
         while self.params.get('page') != 10:

@@ -9,5 +9,5 @@ class Parser(ABC):
         pass
 
     @abstractmethod
-    def load_vacancies(self, *args, **kwargs):
+    def load(self, *args, **kwargs):
         pass
