@@ -33,6 +33,7 @@ class Vacancy:
     @classmethod
     def cast_to_object_list(cls, items):
         """Преобразование набора данных из JSON в список объектов"""
+        Vacancy.index = -1
         object_list = []
         for item in items:
             vacancy = Vacancy(item.get('name'), item.get('salary'), item.get('area'), item.get('alternate_url'))
@@ -43,12 +44,25 @@ class Vacancy:
                 object_list.append(vacancy)
         return object_list
 
+    def convert_currency(self, currency):
+        """Переводит зарплату в рубли по курсу валюты"""
+        if self.currency != 'RUR':
+            print(f'---\n{self.pay} {self.currency}')
+
+            converted_pay = self.pay * (currency['Value'] / currency['Nominal'])
+            self.pay = converted_pay
+            self.currency = "RUR"
+            print(f'{self.pay} {self.currency}\n---')
+
     def compare_pay(self, other):
-        """Если буду работать с разными валютами понадобится проверка"""
+        """Сравнивает 2 вакансии по зарплате"""
         if isinstance(other, self.__class__):
-            difference = self.pay - other.pay
-            if self.pay < other.pay:
-                return f'На второй работе зарплата выше на {abs(difference)} {self.currency}'
+            if self.currency == other.currency:
+                difference = self.pay - other.pay
+                if self.pay < other.pay:
+                    return f'На второй работе зарплата выше на {abs(difference)} {self.currency}'
+                else:
+                    return f'На второй работе зарплата ниже на {abs(difference)} {self.currency}'
             else:
-                return f'На второй работе зарплата ниже на {abs(difference)} {self.currency}'
+                return 'Не возможно сравнить разные валюты'
         raise TypeError('Сравнивать можно только с экземплярами класса Vacancy')
