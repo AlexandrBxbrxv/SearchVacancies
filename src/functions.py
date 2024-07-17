@@ -28,8 +28,7 @@ def user_interaction():
             hh.load(search_request)
             vacancies = Vacancy.cast_to_object_list(hh.vacancies)
             print(f'Загружено {len(vacancies)} вакансий.')
-            for vacancy in vacancies:
-                file_worker.add_vacancy(vacancy)
+            file_worker.save(vacancies)
             print('Сохранение завершено.')
 
         if user_input == '2':
@@ -45,6 +44,7 @@ def user_interaction():
 
             if user_input_2 == '1':
                 # Перевести валюты всех вакансий в рубли
+                print('Загружаем актуальный на сегодня курс валют...')
                 currency_request = CurrencyRequest()
                 currency_dict = currency_request.load()
                 vacancies = Vacancy.cast_to_object_list(file_worker.load())
@@ -60,13 +60,15 @@ def user_interaction():
                                 print(f'Вакансию с id {vacancy.index} не возможно перевести в рубли,'
                                       f' в словаре валют нет {vacancy.currency}')
                             vacancy.convert_currency(currency)
-                    file_worker.add_vacancy(vacancy)
+                file_worker.save(vacancies)
+                print('Зарплаты вакансий были переведены в рубли.')
 
             if user_input_2 == '2':
                 # Вывод вакансий от указанного уровня зарплаты
                 pay_value = input('Введите минимальную сумму которую хотите получать: \n')
                 result = file_worker.find_vacancies_pay(int(pay_value))
                 vacancies = Vacancy.cast_to_object_list(result)
+                print(f'Найдено {len(vacancies)} вакансий.')
                 for i in vacancies:
                     print(i)
 
@@ -74,17 +76,24 @@ def user_interaction():
                 # Вывод топ n вакансий по зарплате
                 top_num = int(input('Введите цифру топа(топ 5): \n'))
                 vacancies = Vacancy.cast_to_object_list(file_worker.load())
-                sorted_pay_vacancies = sorted([item.pay for item in vacancies], key=lambda x: x[1], reverse=True)
-                print(sorted_pay_vacancies[top_num])
+                sorted_pay_vacancies = sorted([item.pay for item in vacancies], reverse=True)
+                print(sorted_pay_vacancies[:top_num])
 
             if user_input_2 == '4':
                 # Сравнить вакансии по зарплате
-                vacancy_id = input('Введите id двух интересующих вакансий через пробел: \n')
+                put = input('Введите id двух интересующих вакансий через пробел: \n')
+                ind_1, ind_2 = put.split(' ')
                 vacancies = Vacancy.cast_to_object_list(file_worker.load())
-                result = vacancies[int(vacancy_id[0])].compare_pay(vacancies[int(vacancy_id[2])])
-                print(f'{vacancies[int(vacancy_id[0])]}\n{vacancies[int(vacancy_id[2])]}\n{result}')
+                # Ужасная система поиска, как это улучшить?
+                vac_1 = [item for item in vacancies if item.index == ind_1]
+                vac_2 = [item for item in vacancies if item.index == ind_2]
+
+                result = vac_1[0].compare_pay(vac_2[0])
+                print(f'{vac_1[0]}\n{vac_2[0]}\n{result}')
 
 
 if __name__ == '__main__':
 
     user_interaction()
+
+    """ID буду брать у оригинальных вакансий с интернета а не определять свои"""
