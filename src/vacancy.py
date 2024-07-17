@@ -46,13 +46,9 @@ class Vacancy:
 
     def convert_currency(self, currency):
         """Переводит зарплату в рубли по курсу валюты"""
-        if self.currency != 'RUR':
-            print(f'---\n{self.pay} {self.currency}')
-
-            converted_pay = self.pay * (currency['Value'] / currency['Nominal'])
-            self.pay = converted_pay
-            self.currency = "RUR"
-            print(f'{self.pay} {self.currency}\n---')
+        converted_pay = round(self.pay * (currency['Value'] / currency['Nominal']), 2)
+        self.pay = converted_pay
+        self.currency = "RUR"
 
     def compare_pay(self, other):
         """Сравнивает 2 вакансии по зарплате"""
