@@ -1,7 +1,7 @@
 class FindVacancyConstructor:
     """Содержит методы поиска по критериям"""
-    def __init__(self, vacancies):
-        self.vacancies = vacancies
+    def __init__(self, vacancies_dict):
+        self.__vacancies_dict = vacancies_dict
 
     def find_vacancy(self, key, value):
         """Выбирает и запускает метод поиска, возвращает список объектов соответствующих value"""
@@ -15,23 +15,23 @@ class FindVacancyConstructor:
     def __by_name(self, value):
         """Записывает на возврат, если value найдено внутри названия вакансии"""
         result = []
-        for item in self.vacancies:
-            if value in item['name']:
+        for item in self.__vacancies_dict:
+            if value.lower() in item['name'].lower():
                 result.append(item)
         return result
 
     def __by_pay(self, value):
         """Записывает на возврат, если зарплата вакансии больше либо равна value"""
         result = []
-        for item in self.vacancies:
+        for item in self.__vacancies_dict:
             if item['salary']['from'] >= value:
                 result.append(item)
         return result
 
     def __by_area_name(self, value):
-        """Записывает на возврат, если название локации вакансии совпадает с value"""
+        """Записывает на возврат, если value найдено внутри названия локации"""
         result = []
-        for item in self.vacancies:
-            if item['area']['name'] == value:
+        for item in self.__vacancies_dict:
+            if value.lower() in item['area']['name'].lower():
                 result.append(item)
         return result
