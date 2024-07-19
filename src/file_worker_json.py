@@ -56,8 +56,6 @@ class FileWorkerJson(FileWorker):
             file.write(json.dumps(self.vacancy_list, indent=2))
         self.vacancy_list = []
 
-    """Вместо сейв надо использовать апдейт а сейв должен дописывать"""
-
     def load(self):
         """Загружает список вакансий из файла saved_vacancies.json"""
         with open(file=self.__full_file_path, mode='r', encoding='UTF-8') as file:
