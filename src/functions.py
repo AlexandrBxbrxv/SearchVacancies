@@ -129,8 +129,3 @@ def user_interaction():
 
         if user_input == 'stop':
             is_stop = True
-
-
-if __name__ == '__main__':
-
-    user_interaction()
