@@ -1,6 +1,8 @@
 import pytest
 
 
+# На тесты времени не хватило
+
 def test_vacancy_compare_pay_1(vacancy_developer90, vacancy_factory30):
     assert vacancy_developer90.compare_pay(vacancy_factory30) == 'На второй работе зарплата ниже на 60000 RUR'
 

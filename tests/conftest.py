@@ -30,9 +30,9 @@ def salary_currency_pay90():
 
 @pytest.fixture
 def vacancy_factory30(salary_none_pay30, link):
-    return Vacancy('Слесарь', salary_none_pay30, None, link)
+    return Vacancy('1', 'Слесарь', salary_none_pay30, None, link)
 
 
 @pytest.fixture
 def vacancy_developer90(salary_currency_pay90, link):
-    return Vacancy('Python Разработчик', salary_currency_pay90, 'ПН-ПТ', link)
+    return Vacancy('2', 'Python Разработчик', salary_currency_pay90, 'ПН-ПТ', link)
