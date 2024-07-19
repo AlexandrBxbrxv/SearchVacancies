@@ -2,6 +2,7 @@ import json
 from os import path
 
 from src.file_worker import FileWorker
+from src.file_empty_exception import FileEmptyException
 
 
 class FileWorkerJson(FileWorker):
@@ -44,9 +45,12 @@ class FileWorkerJson(FileWorker):
 
     def delete_vacancy(self, vacancy_id):
         """Удаление вакансии из списка на сохранение"""
+        self.vacancy_list = self.load()
         for item in self.vacancy_list:
             if item['id'] == vacancy_id:
                 self.vacancy_list.remove(item)
+        with open(file=self.__full_file_path, mode='w', encoding='UTF-8') as file:
+            file.write(json.dumps(self.vacancy_list, indent=2))
 
     def save(self, vacancies):
         """Записывает список вакансий в файл saved_vacancies.json"""
@@ -58,5 +62,8 @@ class FileWorkerJson(FileWorker):
 
     def load(self):
         """Загружает список вакансий из файла saved_vacancies.json"""
-        with open(file=self.__full_file_path, mode='r', encoding='UTF-8') as file:
-            return json.loads(file.read())
+        try:
+            with open(file=self.__full_file_path, mode='r', encoding='UTF-8') as file:
+                return json.loads(file.read())
+        except FileEmptyException('Файл пуст'):
+            return []

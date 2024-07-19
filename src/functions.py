@@ -18,6 +18,7 @@ def user_interaction():
                       '2 - Поиск вакансий по критериям\n'
                       '3 - Вывод топ n вакансий по зарплате\n'
                       '4 - Сравнить вакансии по зарплате\n'
+                      '5 - Удалить вакансию\n'
                       'Завершение работы - stop\n'
                       '-\n')
         user_input = input(choice_msg)
@@ -80,7 +81,7 @@ def user_interaction():
                 finder = FindVacancyConstructor(file_worker.load())
                 found = Vacancy.cast_to_object_list(finder.find_vacancy(key, user_value))
 
-                print(f'Найдено {len(found)} вакансий')
+                print(f'Найдено {len(found)} вакансий.')
                 for item in found:
                     print(item)
             else:
@@ -118,9 +119,18 @@ def user_interaction():
                 except IndexError:
                     print('Не существующие индексы')
 
+        if user_input == '5':
+            try:
+                vacancy_id = input('Введите id вакансии:\n')
+                file_worker.delete_vacancy(vacancy_id)
+                print('Вакансия удалена.')
+            except IndexError:
+                print('Не существующий индекс')
+
         if user_input == 'stop':
             is_stop = True
 
 
 if __name__ == '__main__':
+
     user_interaction()
