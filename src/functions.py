@@ -76,24 +76,30 @@ def user_interaction():
                 # Вывод топ n вакансий по зарплате
                 top_num = int(input('Введите цифру топа(топ 5): \n'))
                 vacancies = Vacancy.cast_to_object_list(file_worker.load())
-                sorted_pay_vacancies = sorted([item.pay for item in vacancies], reverse=True)
-                print(sorted_pay_vacancies[:top_num])
+                vacancies.sort(key=lambda vacancy: vacancy.pay, reverse=True)
+                for vacancy in vacancies[:top_num]:
+                    print(vacancy)
 
             if user_input_2 == '4':
                 # Сравнить вакансии по зарплате
-                put = input('Введите id двух интересующих вакансий через пробел: \n')
-                ind_1, ind_2 = put.split(' ')
-                vacancies = Vacancy.cast_to_object_list(file_worker.load())
-                # Ужасная система поиска, как это улучшить?
-                vac_1 = [item for item in vacancies if item.index == ind_1]
-                vac_2 = [item for item in vacancies if item.index == ind_2]
+                indexes = input('Введите id двух интересующих вакансий через пробел: \n')
+                try:
+                    ind_1, ind_2 = indexes.split(' ')
+                except ValueError:
+                    print('Не верный формат ввода')
+                    ind_1 = '0'
+                    ind_2 = '0'
 
-                result = vac_1[0].compare_pay(vac_2[0])
-                print(f'{vac_1[0]}\n{vac_2[0]}\n{result}')
+                vacancies = Vacancy.cast_to_object_list(file_worker.load())
+                try:
+                    vac_1 = [item for item in vacancies if item.index == ind_1]
+                    vac_2 = [item for item in vacancies if item.index == ind_2]
+                    result = vac_1[0].compare_pay(vac_2[0])
+                    print(f'{vac_1[0]}\n{vac_2[0]}\n{result}')
+                except IndexError:
+                    print('Не существующие индексы')
 
 
 if __name__ == '__main__':
 
     user_interaction()
-
-    """ID буду брать у оригинальных вакансий с интернета а не определять свои"""
